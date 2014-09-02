@@ -1,0 +1,65 @@
+{
+	"manifest_version":2,
+	"name":"TR_Scrape",
+	"version":"1.3.3",
+	"permissions": [ 
+		"background", 
+		"contextMenus",
+		"webRequest",
+		"tabs", 
+		"https://*.travelrepublic.co.uk/*", 
+		"https://*.travelrepublic.ie/*",
+		"https://*.travelrepublic.es/*", 
+		"https://*.travelrepublic.it/*",
+		"https://*.dnatatravel.com/*",
+		"https://*.dnatatravel.com.sa/*",
+		"https://*.dnata-agents.com/*",
+		"http://mymemory.translated.net/*"
+	],
+	"description":"TravelRepublic internal use only",
+	"icons":{
+		"16": "images/favicon-32x32.ico",
+        "48": "images/favicon.png",
+    	"128": "images/apple-touch-icon-120x120-precomposed.png"
+	},
+	
+	"browser_action":{
+		"default_icon":"images/favicon-32x32.ico",
+		"default_title":"TravelRepublic",
+		"default_popup":"popup.html"
+	},
+	
+	"content_scripts":[{
+		"js":[
+			"js/app/content.js"		
+		],
+		"matches":[
+			"https://*.travelrepublic.co.uk/*",
+			"http://*.travelrepublic.co.uk/*",
+			"https://*.travelrepublic.ie/*",
+			"http://*.travelrepublic.ie/*",
+			"https://*.travelrepublic.es/*",
+			"http://*.travelrepublic.es/*",
+			"https://*.travelrepublic.it/*",
+			"http://*.travelrepublic.it/*",
+			"https://*.travelrepublic.at/*",
+			"https://*.travelrepublic.de/*",	
+			"https://*.dnatatravel.com/*",
+			"https://*.dnatatravel.com.sa/*",
+			"https://*.dnata-agents.com/*"	
+		],
+		"run_at":"document_end"
+	}],
+	
+	"background": {
+		"scripts": [
+			"background.js",
+			"js/lib/jquery-1.11.0.js"
+        ]
+		//"page":"background.html"
+	},
+	
+	"content_security_policy": "script-src 'self' https://mymemory.translated.net; object-src 'self'",
+	
+	"options_page": "options.html"
+}

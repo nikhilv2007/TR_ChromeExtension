@@ -1,0 +1,22 @@
+v1.4.0
+1.Provision to edit email domain value in popup.
+2.Switch to turn on/off autofill on booking form in popup.
+3.Autofill card details(visa on TR and mastercard on dnata pages)
+4.option to display/edit/create cookies in popup.
+
+v1.3.0
+1.Flight and hotel selection history in popup(Not implemented for dnata 1 way flights and mobile).
+2.Autofill address on UK domain for the new functionality.
+
+v1.2.0
+1.Placeholder in pop-up to enter Email.
+2.Functionalities to "show/hide all rooms", "scroll to PAH and 1$ rooms".
+3.Autofilling on booking form for mobilesite(angular.js)
+
+v1.1.0
+1.Autofiller on booking form. 
+2.Autolaunch derwent when booking is complete.
+3.TR launcher available on pop-up.
+
+v1.0.0
+1.Transalation to english(context menu)

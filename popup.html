@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<style>
+			body { 
+                min-width: 420px; 
+                overflow-x: hidden; 
+                font-family: Arial, sans-serif; 
+                font-size: 12px; 
+            }
+            a{
+            	text-decoration:none;
+            	color: white;
+            }
+            a:hover{
+            	//color:rgb(255, 144, 48);
+            }
+			button{
+				font-weight: bold;
+				background-color: rgb(255, 144, 48);
+				color: white;
+				border-radius: 5px;
+			}
+			.selection{
+				border-radius: 5px;
+				background-color: #0984E9;	//rgb(102, 158, 81);
+				color: white;
+				border: 3px;
+			}
+			.selection h4{
+				padding: 5px 0px 0px 5px;
+			}
+			table,th,td{
+				border:1px solid white;
+				font-size: 12px;
+				color: white;				
+				border-collapse:collapse;
+				padding:3px;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="popup.js"></script>
+		<button>
+			<a target="_blank" href="https://googledrive.com/host/0ByRhDZ9ODOwJQ2hjVmNfcXRkU0U/TravelRepublic_Links.html">TR Launcher</a>
+		</button>
+		<input id ='email' placeholder='Email' style="width:100px;"/>@<input id ='emailDomain' placeholder='domain.com' value="travelrepublic.co.uk" style="width:150px;"/><br>
+		<label title="Uncheck to disable autofiller on booking form">
+			<input id = 'autofiller' type="checkbox"/>Autofiller on booking form<br>
+		</label>
+		<div id='hotelRooms'>
+			<button id="btnShowAllRooms">Show/Hide rooms</button><br>
+			Scroll to room:
+			<button id="btnPayAtHotelRoom">Pay@hotel</button>
+			<button id="btnDepositRoom">1$ Deposit</button><br>
+		</div>
+				
+		<div class="selection">
+			<div id="flightData"></div>
+		</div>
+		
+		<div class="selection">
+			<div id="hotelData"></div>
+		</div>
+		
+		<div style="border:1px solid black; border-radius: 5px">
+			<label title="works only on TR sites">
+				<input id="chkCookies" type="checkbox">Dsiplay Cookies</input>
+			</label>
+			<ol id="cookieList">
+				
+			</ol>
+			<button id='setCookie' style="display: none">Set Cookie</button>
+		</div>
+	</body>
+</html>
