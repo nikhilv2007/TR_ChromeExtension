@@ -89,7 +89,7 @@ function showCookie(){
 		});
 	}
 	else{
-		location.reload();
+		document.getElementById("cookieList").innerHTML = "";
 	}	
 	
 }

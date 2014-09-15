@@ -81,7 +81,7 @@ function checkForValidUrl(tab)  {
 							for(i=0;i<hotelAvailabilityData.length;i++){
 								//console.log("hotel name - "+ hotelAvailabilityData[i].estabName);
 								if(hotelAvailabilityData[i].estabId === estabId){
-									hotelBookingData = "<h4><i>Last hotel selection - </i>" +hotelAvailabilityData[i].estabName+"</h4><table><tbody><tr><th>Title</th><th>Board type</th><th>Cost</th></tr>";
+									hotelBookingData = "<h4><i>Last hotel selection - </i>" +hotelAvailabilityData[i].estabName+"</h4><table><tbody><tr><th>Room Type</th><th>Board type</th><th>Cost</th></tr>";
 									for(j=0;j<hotelAvailabilityData[i].rooms.length;j++){
 										if(roomNumber.indexOf(hotelAvailabilityData[i].rooms[j].roomId) > -1){											
 											hotelBookingData += "<tr><td>" +hotelAvailabilityData[i].rooms[j].roomTitle+"</td><td>"+ hotelAvailabilityData[i].rooms[j].boardType+"</td><td>"+
