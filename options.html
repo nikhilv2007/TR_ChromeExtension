@@ -6,11 +6,19 @@
   </head>
   <body>
     <p>Work in progress...</p>
-    
+    <label title="Uncheck to disable autofiller on booking form">
+		<input id = 'autofiller' type="checkbox"/>Autofiller on booking form<br>
+	</label>
+	
     Title : <input type='text' id='title'/><br>
     Firstname : <input type='text' id='fname'/><br>
     Lastname : <input type='text' id='lname'/><br>
-    <input id ='email' placeholder='Email' style="width:100px;"/>@<input id ='Domain' placeholder='domain.com' value="travelrepublic.co.uk" style="width:150px;"/><br>
+    <input id ='email' placeholder='Email' style="width:100px;"/>@<input id ='emailDomain' placeholder='domain.com' value="travelrepublic.co.uk" style="width:150px;"/><br>
     
+    <label title="works only on TR sites">
+		<input id="chkCookies" type="checkbox">Display Cookies</input>
+	</label>
+	
+	<script src="options.js"></script>
   </body>
 </html>

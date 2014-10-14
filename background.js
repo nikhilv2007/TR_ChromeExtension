@@ -3,6 +3,7 @@ var sourceLanguage="";
 var hotelAvailabilityData,hotelBookingData="",hotelListenerActivated = false;
 var flightAvailabilityData,flightBookingData="",flightListenerActivated = false;
 var autofiller = true;
+var FSCBookingId ="";
 
 // Listen for any changes to the URL of any tab.
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
@@ -161,8 +162,8 @@ function checkForValidUrl(tab)  {
 													(tab.url.indexOf('#addressEntry') > -1) || (tab.url.indexOf('#entry') > -1) ||
 													(tab.url.indexOf('#autocompleteEntry') > -1) || (tab.url.indexOf('#dateTimeEntry ') > -1) ||
 													(tab.url.indexOf('/Outbound/') > -1) || (tab.url.indexOf('#flight-section') > -1) ||     //transfer : mobile : angular
-													(tab.url.indexOf('/passenger/') > -1) || (tab.url.indexOf('#passenger-section') > -1)		//holidays : mobile: angular
-													
+													(tab.url.indexOf('/passenger/') > -1) || (tab.url.indexOf('#passenger-section') > -1)||		//holidays : mobile: angular
+													(tab.url.indexOf('//www.') > -1) || (tab.url.indexOf('//m.travelrepublic') > -1) || (tab.url.indexOf('//m.dnatatravel') > -1)		//booking page on Live
 												  ) 
 												&& autofiller){												  	
 		//alert("booking form");
@@ -209,11 +210,19 @@ function checkForValidUrl(tab)  {
 		//console.log("Booking id:" +bookingId);
 		
 	}
-	
-	else if(tab.url.indexOf('.derwent.') > -1){
-		//derwent, no action
+	//derwent booking page
+	else if(/derwent\.travelrepublic\.com[\/]+Booking\/boBookingDetails\.aspx\?/.test(tab.url)){
+		
+		chrome.tabs.sendMessage(tab.id, {action : 'bookingDetails'}, function(source) {
+			
+		});
 	}	
-	
+	//derwent booking page
+	else if(/derwent\.travelrepublic\.com[\/]+Reporting\/rpOrderRequiredSecurity\.aspx/.test(tab.url)){
+		
+		chrome.tabs.sendMessage(tab.id, {action : 'FSCbookingHighlight', bookingId : FSCBookingId});
+		FSCBookingId = "";
+	}
 	else if (tab.url.indexOf('travelrepublic') > -1){          
 		//alert("We're on TravelRepublic!");  
 		
@@ -232,13 +241,17 @@ chrome.runtime.onMessage.addListener(
     	flightAvailabilityData = request.flightData;
     	//console.log(flightAvailabilityData);
     }
-      
+    //launch FSC Manager
+    else if (request.task == "launchFSCManager"){
+    	FSCBookingId = request.bookingId;
+    	chrome.tabs.create({url:request.URL,active:true});
+    }  
 });
   
 //open a booking in derwent
 function launchDerwent(environment,bookingId){
 	var derwentUrl = "http://" + environment +"uk.derwent.travelrepublic.com/Booking/boBookingDetails.aspx?BookingID="+bookingId;
-	chrome.tabs.create({url:derwentUrl,active:false});
+	chrome.tabs.create({url:derwentUrl,active:true});
 }
 
 //code for context menu

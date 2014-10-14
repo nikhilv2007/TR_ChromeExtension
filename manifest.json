@@ -7,6 +7,7 @@
 		"contextMenus",
 		"webRequest",
 		"tabs", 
+		//"alarms",
 		"https://*.travelrepublic.co.uk/*", 
 		"https://*.travelrepublic.ie/*",
 		"https://*.travelrepublic.es/*", 
@@ -14,6 +15,7 @@
 		"https://*.dnatatravel.com/*",
 		"https://*.dnatatravel.com.sa/*",
 		"https://*.dnata-agents.com/*",
+		"http://*.derwent.travelrepublic.com/*",	
 		"http://mymemory.translated.net/*"
 	],
 	"description":"TravelRepublic internal use only",
@@ -46,7 +48,8 @@
 			"https://*.travelrepublic.de/*",	
 			"https://*.dnatatravel.com/*",
 			"https://*.dnatatravel.com.sa/*",
-			"https://*.dnata-agents.com/*"	
+			"https://*.dnata-agents.com/*",
+			"http://*.derwent.travelrepublic.com/*"	
 		],
 		"run_at":"document_end"
 	}],
@@ -55,11 +58,12 @@
 		"scripts": [
 			"background.js",
 			"js/lib/jquery-1.11.0.js"
-        ]
+        ]//,
+        //"persistent": false
 		//"page":"background.html"
 	},
 	
-	"content_security_policy": "script-src 'self' https://mymemory.translated.net; object-src 'self'",
+	"content_security_policy": "script-src 'self' https://mymemory.translated.net; object-src 'self'"
 	
-	"options_page": "options.html"
+	//"options_page": "options.html"
 }

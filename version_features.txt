@@ -1,8 +1,9 @@
 v1.4.0
 1.Provision to edit email domain value in popup.
-2.Switch to turn on/off autofill on booking form in popup.
+2.Switch to turn on/off autofill on booking form in popup and disabled autofill on Live.
 3.Autofill card details(visa on TR and mastercard on dnata pages)
 4.option to display/edit/create cookies in popup.
+5.FSC Manager link adjacent to booking status and highlight the booking on landing page on click
 
 v1.3.0
 1.Flight and hotel selection history in popup(Not implemented for dnata 1 way flights and mobile).

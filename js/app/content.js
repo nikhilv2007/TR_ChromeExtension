@@ -1,6 +1,4 @@
-var timeOutInterval, 
-	depositRoomCount = pAHRoomCount = 0,
-	roomType = 'none';
+var timeOutInterval, 	depositRoomCount = pAHRoomCount = 0,	roomType = 'none';
 var displayedHotelData;
 chrome.extension.onMessage.addListener(function(request, sender, callback){
 	
@@ -130,6 +128,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
     	
     	//Loop until elements on booking page are loaded and filled
       	timeOutInterval = setInterval(function(){bookingFormInject(request.email);},3000);
+      	//chrome.alarms.create("bookingPageLoad",{delayInMinutes:0.05});
     	
     	//callback(document.documentElement.innerHTML); 	
     }
@@ -150,6 +149,45 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
 		bookingId = bookingId.split("/");
 		//alert(bookingId[1]);
 		callback(bookingId[1]);
+    }
+    
+    else if (request.action == 'bookingDetails'){
+    	//Derwent: booking details page
+
+    	//enable FSC(failed security check) manager link 
+    	var mydiv = document.getElementById("_ctl0_cphMain_conBookingInfo_lblBookingStatus");
+
+		if(mydiv.innerText == "Failed Security Check"){
+			var aTag = document.createElement('a');
+			aTag.setAttribute('style',"cursor: hand;");
+			aTag.setAttribute('id','launchFSCManager');
+			aTag.innerHTML = " FSC Manager";
+			
+			//Booking notes section by default
+			document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').appendChild(aTag) || mydiv.appendChild(aTag);
+			
+			document.getElementById('launchFSCManager').addEventListener('click', launchFSCManager);
+		}
+		/*
+		//BlackListed Booking
+		if(document.getElementById('_ctl0_cphMain_trImportantNotes') && /blacklisted/i.test(document.getElementById('_ctl0_cphMain_trImportantNotes').innerText)){
+			console.log("Backlisted");
+		}
+		*/
+    }
+    
+    //highlight FSC booking in derwent
+    else if (request.action == 'FSCbookingHighlight' && request.bookingId != ""){
+    	var elements = document.getElementById('Table4').getElementsByTagName("tbody");
+		for (var i = 0; i < elements.length; i++) {
+			var link = elements[i].getElementsByTagName("a");
+		    var index = link[0].innerText.indexOf(request.bookingId);
+		    if (index != -1) {
+		    	elements[i].getElementsByTagName("a")[0].setAttribute('style','background-color: yellow;');
+		    	elements[i].scrollIntoView(true);
+		        break;
+		    }
+		}
     }
     
     else if (request.action == 'getCookies'){
@@ -276,13 +314,22 @@ function captureAllFlights(){
 	});
 }
 
+/*
+chrome.alarms.onAlarm.addListener(function(alarmDetails){
+	if (alarmDetails.name == "bookingPageLoad"){
+		bookingFormInject("abcd@123.com");
+	}
+});
+*/
+
 function bookingFormInject(userEmailId){
 	//console.log('booking form page loaded');
 	var dnataPage = (document.URL.indexOf('dnata')> -1)? true:false;
 	
 	if(document.getElementById('conTitle') != null){
 		clearInterval(timeOutInterval);
-		
+		//chrome.alarms.clear("bookingPageLoad", function(wasCleared){});
+			
 		//implementation for search address function
 	    if(document.getElementById('conAddress') != null){
 		    document.getElementById('conAddress').value = 'myAddress';
@@ -411,6 +458,8 @@ function bookingFormInject(userEmailId){
 	//for mobilesite booking form implemented on angular.js
 	else if(document.getElementsByName('title').length > 0){
 		clearInterval(timeOutInterval);
+		//chrome.alarms.clear("bookingPageLoad", function(wasCleared){});
+		
 		if(document.getElementsByName('title')[0].getAttribute('class').indexOf("ng-invalid") >= 0){
 			//mimickKeyboardEnter('', 'Name', 'title', 0);
 			mimickKeyboardEnter('Mr', 'Name', 'title', 0);
@@ -515,8 +564,8 @@ function bookingFormInject(userEmailId){
 			}
 		}
 		//check agree to TR terms & conditions
-		if(document.querySelector('[model="acceptedAgencyTerms"]') != null){
-			document.querySelector('[model="acceptedAgencyTerms"]').click();
+		if(document.querySelector('[model="cm.booking.UserData.Contact.AgreeToConditions"]') != null){
+			document.querySelector('[model="cm.booking.UserData.Contact.AgreeToConditions"]').click();
 		}
 		
 		//check promotion mail opt out
@@ -531,15 +580,6 @@ function selectAddressUK(){
 	if(document.getElementById('pcaAddressFinder') != null){
 		document.getElementById('pcaAddressFinder').value = 'Travel Republic Ltd, Clarendon House, 147 London Road|Kingston upon Thames||KT2  6NH';
 		document.getElementsByClassName('trp-btn matchAddress')[0].click();
-	}
-	//for mobile site(non angular framework)
-	else if(document.querySelectorAll('p.ui-li-desc').length > 0){
-		for(var i = document.getElementsByClassName('ui-li-desc').length-1; i >= 0 ; i--){
-			if(document.getElementsByClassName('ui-li-desc')[i].innerHTML.indexOf("Travel Republic") > -1){
-				document.getElementsByClassName('ui-li-desc')[i].click();
-				break;
-			}
-		}
 	}
 	else{
 		console.log("address values not loaded yet");
@@ -617,6 +657,15 @@ function simulatedClick(target, options) {
 
     //Fire the event
     target.dispatchEvent(event);
+}
+
+//function to send data to background.js to open FSC manager in new tab and highlight the booking page
+function launchFSCManager(){
+	
+	var Url = document.URL.slice(0,document.URL.indexOf('/Booking')) +"/Reporting/rpOrderRequiredSecurity.aspx";
+	var bookingId = document.URL.split('=')[1];
+	 
+	chrome.runtime.sendMessage({task:"launchFSCManager", URL:Url, bookingId:bookingId});
 }
 
 // return option value for the specified text displayed

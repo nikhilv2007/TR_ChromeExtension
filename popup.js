@@ -90,6 +90,7 @@ function showCookie(){
 	}
 	else{
 		document.getElementById("cookieList").innerHTML = "";
+		location.reload();		//reload popup DOM 
 	}	
 	
 }
