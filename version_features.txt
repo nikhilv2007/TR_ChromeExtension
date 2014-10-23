@@ -1,3 +1,6 @@
+v1.5.0
+1.Capture WebRequests which error or return error status codes.
+
 v1.4.0
 1.Provision to edit email domain value in popup.
 2.Switch to turn on/off autofill on booking form in popup and disabled autofill on Live.

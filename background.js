@@ -5,6 +5,8 @@ var flightAvailabilityData,flightBookingData="",flightListenerActivated = false;
 var autofiller = true;
 var FSCBookingId ="";
 
+chrome.browserAction.setBadgeText({text: "0"});
+
 // Listen for any changes to the URL of any tab.
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	//console.log(changeInfo.status + " -- " + tab.url);
@@ -12,6 +14,40 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 		checkForValidUrl(tab);
 	}
 });
+
+//Capture data when any xhr fails
+chrome.webRequest.onCompleted.addListener( 			
+	function(xhrData){
+		
+		if(parseInt(xhrData.statusCode) >=400){		//type == 'xmlhttprequest'
+			//console.log("URL - " +xhrData.url+ "\nStatus - " + parseInt(xhrData.statusCode)+ "\nType - " +xhrData.type);
+			chrome.tabs.query({active:true,highlighted:true}, function(tabsInfo){
+				chrome.browserAction.getBadgeText({tabId: tabsInfo[0].id},function(errorCount){
+					//console.log(errorCount);
+					chrome.browserAction.setBadgeText({text: String(parseInt(errorCount)+1), tabId:tabsInfo[0].id});
+				});
+			});
+		}
+		
+	},
+	{urls: ["<all_urls>"]}
+);
+
+//Capture data when any error encountered
+chrome.webRequest.onErrorOccurred.addListener( 			
+	function(xhrData){
+
+		//console.log("URL - " +xhrData.url+ "\nType - " +xhrData.type);
+		chrome.tabs.query({active:true,highlighted:true}, function(tabsInfo){
+			chrome.browserAction.getBadgeText({tabId: tabsInfo[0].id},function(errorCount){
+				console.log(errorCount);
+				chrome.browserAction.setBadgeText({text: String(parseInt(errorCount)+1), tabId:tabsInfo[0].id});
+			});
+		});
+		
+	},
+	{urls: ["<all_urls>"]}
+);
 
 //listen for any tabs get activated.
 chrome.tabs.onActivated.addListener( function(info) { 
