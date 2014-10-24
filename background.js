@@ -40,7 +40,7 @@ chrome.webRequest.onErrorOccurred.addListener(
 		//console.log("URL - " +xhrData.url+ "\nType - " +xhrData.type);
 		chrome.tabs.query({active:true,highlighted:true}, function(tabsInfo){
 			chrome.browserAction.getBadgeText({tabId: tabsInfo[0].id},function(errorCount){
-				console.log(errorCount);
+				//console.log(errorCount);
 				chrome.browserAction.setBadgeText({text: String(parseInt(errorCount)+1), tabId:tabsInfo[0].id});
 			});
 		});
@@ -359,4 +359,35 @@ function callTranslateApi(text){
 		});
 }
   
-//chrome.browserAction.setBadgeText({text:"0"});
+//Omnibox suggestion for urls
+chrome.omnibox.onInputChanged.addListener(function (typedText, suggestResults){
+	//console.log("you typed : " +typedText);
+	
+	var targetUrls = ["https://www.travelrepublic.co.uk","https://www.travelrepublic.ie","https://www.travelrepublic.es","https://www.travelrepublic.it","https://www.travelrepublic.at","https://www.travelrepublic.de","http://uk.derwent.travelrepublic.com"
+	];
+	//var environment = ["pp", "bolt", "cavendish", "fraser", "greene", "harris", "johnson", "lewis", "linford", "nash", "owens", "powell", "regis"];
+	var suggestions = [];
+	
+	if(typedText.length > 1){
+		for(var i=0; i<targetUrls.length; i++){
+			if(suggestions.length  === 5 ){
+				break;
+			}
+			else if( targetUrls[i].search(typedText) > -1){
+				suggestions.push({content:targetUrls[i], description: targetUrls[i]});
+			}
+		}
+	}
+		
+	if(suggestions.length > 0){
+	    suggestResults(suggestions);
+    }
+        
+});
+
+// This event is fired with the user accepts the input in the omnibox.
+chrome.omnibox.onInputEntered.addListener(function(text){
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	    chrome.tabs.update(tabs[0].id, {url: text});
+	});
+});

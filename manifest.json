@@ -63,6 +63,8 @@
 		//"page":"background.html"
 	},
 	
+	"omnibox": { "keyword" : "q" },
+            
 	"content_security_policy": "script-src 'self' https://mymemory.translated.net; object-src 'self'"
 	
 	//"options_page": "options.html"
