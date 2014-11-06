@@ -3,7 +3,7 @@ var sourceLanguage="";
 var hotelAvailabilityData,hotelBookingData="",hotelListenerActivated = false;
 var flightAvailabilityData,flightBookingData="",flightListenerActivated = false;
 var autofiller = true;
-var FSCBookingId ="";
+var launchBookingId ="";
 
 chrome.browserAction.setBadgeText({text: "0"});
 
@@ -253,11 +253,11 @@ function checkForValidUrl(tab)  {
 			
 		});
 	}	
-	//derwent booking page
-	else if(/derwent\.travelrepublic\.com[\/]+Reporting\/rpOrderRequiredSecurity\.aspx/.test(tab.url)){
+	//derwent report page for FSC, Autobook
+	else if(/derwent\.travelrepublic\.com[\/]+Reporting\/rpOrderRequired/.test(tab.url)){
 		
-		chrome.tabs.sendMessage(tab.id, {action : 'FSCbookingHighlight', bookingId : FSCBookingId});
-		FSCBookingId = "";
+		chrome.tabs.sendMessage(tab.id, {action : 'bookingHighlight', bookingId : launchBookingId});
+		launchBookingId = "";
 	}
 	else if (tab.url.indexOf('travelrepublic') > -1){          
 		//alert("We're on TravelRepublic!");  
@@ -278,8 +278,8 @@ chrome.runtime.onMessage.addListener(
     	//console.log(flightAvailabilityData);
     }
     //launch FSC Manager
-    else if (request.task == "launchFSCManager"){
-    	FSCBookingId = request.bookingId;
+    else if (request.task == "launchBookingManager"){
+    	launchBookingId = request.bookingId;
     	chrome.tabs.create({url:request.URL,active:true});
     }  
 });

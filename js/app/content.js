@@ -166,7 +166,20 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
 			//Booking notes section by default
 			document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').appendChild(aTag) || mydiv.appendChild(aTag);
 			
-			document.getElementById('launchFSCManager').addEventListener('click', launchFSCManager);
+			document.getElementById('launchFSCManager').addEventListener('click', launchBookingManager);
+		}
+		
+		//Rerun failed booking
+		else if(document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').innerText.indexOf('Booking Failed') > -1){
+			var aTag = document.createElement('a');
+			aTag.setAttribute('style',"cursor: hand;");
+			aTag.setAttribute('id','rerunAutoBooker');
+			aTag.innerHTML = " Rerun Autobooker";
+			
+			//Booking notes section by default
+			document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').appendChild(aTag) || mydiv.appendChild(aTag);
+			
+			document.getElementById('rerunAutoBooker').addEventListener('click', launchBookingManager);
 		}
 		/*
 		//BlackListed Booking
@@ -176,14 +189,47 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
 		*/
     }
     
-    //highlight FSC booking in derwent
-    else if (request.action == 'FSCbookingHighlight' && request.bookingId != ""){
-    	var elements = document.getElementById('Table4').getElementsByTagName("tbody");
+    //highlight bookings in derwent
+    else if (request.action == 'bookingHighlight' && request.bookingId != ""){
+    	/*if(document.getElementById('ddlOffice').value !== "0-0"){
+    		
+			//set office = "All Offices"
+	    	document.getElementById('ddlOffice').value = "0-0"; 
+	    	//trigger change event on select option
+			var evt = document.createEvent("HTMLEvents");
+			evt.initEvent('change', true, true);
+			document.getElementById('ddlOffice').dispatchEvent(evt);
+			
+			var highlightInterval = setInterval(function(){
+				alert("inside highlight interval function()");
+				//clearInterval(highlightInterval);
+				var elements = document.getElementsByTagName("a");
+				for (var i = 0; i < elements.length; i++) {
+					
+				    if (elements[i].getAttribute("href").indexOf(request.bookingId) > -1) {
+				    	elements[i].setAttribute('style','background-color: yellow;');
+				    	elements[i].scrollIntoView(true);
+				        break;
+				    }
+				}
+			},4000);
+    	}
+    	else{
+    		var elements = document.getElementsByTagName("a");
+			for (var i = 0; i < elements.length; i++) {
+				
+			    if (elements[i].getAttribute("href").indexOf(request.bookingId) > -1) {
+			    	elements[i].setAttribute('style','background-color: yellow;');
+			    	elements[i].scrollIntoView(true);
+			        break;
+			    }
+			}
+    	}*/       	
+    	var elements = document.getElementsByTagName("a");
 		for (var i = 0; i < elements.length; i++) {
-			var link = elements[i].getElementsByTagName("a");
-		    var index = link[0].innerText.indexOf(request.bookingId);
-		    if (index != -1) {
-		    	elements[i].getElementsByTagName("a")[0].setAttribute('style','background-color: yellow;');
+			
+		    if (elements[i].getAttribute("href").indexOf(request.bookingId) > -1) {
+		    	elements[i].setAttribute('style','background-color: yellow;');
 		    	elements[i].scrollIntoView(true);
 		        break;
 		    }
@@ -660,12 +706,17 @@ function simulatedClick(target, options) {
 }
 
 //function to send data to background.js to open FSC manager in new tab and highlight the booking page
-function launchFSCManager(){
+function launchBookingManager(){
+	var Url;
+	if(document.getElementById("_ctl0_cphMain_conBookingInfo_lblBookingStatus").innerText === "Failed Security Check"){
+		Url = document.URL.slice(0,document.URL.indexOf('/Booking')) +"/Reporting/rpOrderRequiredSecurity.aspx";
+	}
+	else if(document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').innerText.indexOf('Booking Failed') > -1){
+		Url = document.URL.slice(0,document.URL.indexOf('/Booking')) +"/Reporting/rpOrderRequiredAuto.aspx";
+	}
 	
-	var Url = document.URL.slice(0,document.URL.indexOf('/Booking')) +"/Reporting/rpOrderRequiredSecurity.aspx";
 	var bookingId = document.URL.split('=')[1];
-	 
-	chrome.runtime.sendMessage({task:"launchFSCManager", URL:Url, bookingId:bookingId});
+	chrome.runtime.sendMessage({task:"launchBookingManager", URL:Url, bookingId:bookingId});
 }
 
 // return option value for the specified text displayed
