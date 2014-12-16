@@ -158,7 +158,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
     	var mydivFSC = document.getElementById("_ctl0_cphMain_conBookingInfo_lblBookingStatus");
 		var mydivBookingNotes = document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject');
 		
-		if(mydivFSC != null && mydivFSC.innerText == "Failed Security Check"){
+		if(mydivFSC  && mydivFSC.innerText == "Failed Security Check"){
 			var aTag = document.createElement('a');
 			aTag.setAttribute('style',"cursor: hand;");
 			aTag.setAttribute('id','launchFSCManager');
