@@ -155,29 +155,30 @@ chrome.extension.onMessage.addListener(function(request, sender, callback){
     	//Derwent: booking details page
 
     	//enable FSC(failed security check) manager link 
-    	var mydiv = document.getElementById("_ctl0_cphMain_conBookingInfo_lblBookingStatus");
-
-		if(mydiv.innerText == "Failed Security Check"){
+    	var mydivFSC = document.getElementById("_ctl0_cphMain_conBookingInfo_lblBookingStatus");
+		var mydivBookingNotes = document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject');
+		
+		if(mydivFSC != null && mydivFSC.innerText == "Failed Security Check"){
 			var aTag = document.createElement('a');
 			aTag.setAttribute('style',"cursor: hand;");
 			aTag.setAttribute('id','launchFSCManager');
 			aTag.innerHTML = " FSC Manager";
 			
 			//Booking notes section by default
-			document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').appendChild(aTag) || mydiv.appendChild(aTag);
+			mydivBookingNotes.appendChild(aTag) || mydivFSC.appendChild(aTag);
 			
 			document.getElementById('launchFSCManager').addEventListener('click', launchBookingManager);
 		}
 		
 		//Rerun failed booking
-		else if(document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').innerText.indexOf('Booking Failed') > -1){
+		else if(mydivBookingNotes && mydivBookingNotes.innerText.indexOf('Booking Failed') > -1){
 			var aTag = document.createElement('a');
 			aTag.setAttribute('style',"cursor: hand;");
 			aTag.setAttribute('id','rerunAutoBooker');
 			aTag.innerHTML = " Rerun Autobooker";
 			
 			//Booking notes section by default
-			document.getElementById('_ctl0_cphMain_conBookingNotes_rptBookingNotes__ctl0_tdSubject').appendChild(aTag) || mydiv.appendChild(aTag);
+			mydivBookingNotes.appendChild(aTag) || mydiv.appendChild(aTag);
 			
 			document.getElementById('rerunAutoBooker').addEventListener('click', launchBookingManager);
 		}
