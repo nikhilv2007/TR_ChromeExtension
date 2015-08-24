@@ -1,13 +1,12 @@
 {
 	"manifest_version":2,
-	"name":"TR_Scrape",
-	"version":"1.4.1",
+	"name":"TRAssist",
+	"version":"1.4.2",
 	"permissions": [ 
 		"background", 
 		"contextMenus",
 		"webRequest",
-		"tabs", 
-		//"alarms",
+		"tabs",
 		"https://*.travelrepublic.co.uk/*", 
 		"https://*.travelrepublic.ie/*",
 		"https://*.travelrepublic.es/*", 
@@ -58,14 +57,10 @@
 		"scripts": [
 			"background.js",
 			"js/lib/jquery-1.11.0.js"
-        ]//,
-        //"persistent": false
-		//"page":"background.html"
+        ]
 	},
 	
 	"omnibox": { "keyword" : "q" },
             
 	"content_security_policy": "script-src 'self' https://mymemory.translated.net; object-src 'self'"
-	
-	//"options_page": "options.html"
 }

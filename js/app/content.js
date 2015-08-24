@@ -414,6 +414,7 @@ function bookingFormInject(userEmailId){
 		document.getElementById('conTitle').value = 'Mr';
 		//document.getElementById('conFirstName').value = '';
 	    //document.getElementById('conLastName').value = '';
+	    
 	    if (document.getElementById('conEmail') != null){
 	    	document.getElementById('conEmail').value = userEmailId;
 	    	if(document.getElementById('conEmailConfirm') != null){
@@ -454,7 +455,7 @@ function bookingFormInject(userEmailId){
 				}
 				else{
 					document.getElementById('cardNumber').value = '4444333322221111';
-				    document.getElementById('expMonth').value = '01';
+				    document.getElementById('expMonth').value = '01';			    
 				    document.getElementById('expYear').value = '2030';
 				    document.getElementById('secDigits').value = '111';
 				}
@@ -507,44 +508,49 @@ function bookingFormInject(userEmailId){
 		clearInterval(timeOutInterval);
 		//chrome.alarms.clear("bookingPageLoad", function(wasCleared){});
 		
+		//trigger change event on select option
+		var evt = document.createEvent("HTMLEvents");
+		evt.initEvent('change', true, true);
+			
 		if(document.getElementsByName('title')[0].getAttribute('class').indexOf("ng-invalid") >= 0){
-			//mimickKeyboardEnter('', 'Name', 'title', 0);
-			mimickKeyboardEnter('Mr', 'Name', 'title', 0);
-					
+			//it, es domain			
+			if(document.querySelectorAll('select[ng-model="cm.booking.UserData.Contact.Title"]').length == 1){
+				document.getElementsByName('title')[0].value = document.querySelectorAll('option[label="Sig"]').length > 0 ? 'string:Sig': 'string:Sr.';
+				document.getElementsByName('title')[0].dispatchEvent(evt);
+			}
+			else
+				mimickKeyboardEnter('Mr', 'Name', 'title', 0);
+				
 			//document.getElementsByName('firstName')[0].value = '';
 			//document.getElementsByName('lastName')[0].value = '';
-			//mimickKeyboardEnter('', 'Name', 'homePhoneNumber', 0);
-			mimickKeyboardEnter('12345', 'Name', 'homePhoneNumber', 0);
-			//mimickKeyboardEnter('', 'Name', 'email', 0);
-			mimickKeyboardEnter(userEmailId, 'Name', 'email', 0);
+			
+			if(document.getElementsByName('phoneNumber').length > 0){
+				mimickKeyboardEnter('12345', 'Name', 'phoneNumber', 0);
+			}
+			if(document.getElementsByName('email').length > 0){
+				mimickKeyboardEnter(userEmailId, 'Name', 'email', 0);
+			}
 			
 			//outbound flight details
 			if(document.getElementsByName('outboundFlightNumber').length > 0){
-				//mimickKeyboardEnter('', 'Name', 'outboundFlightNumber', 0);
 				mimickKeyboardEnter('AA123', 'Name', 'outboundFlightNumber', 0);
 			}
 			
 			//Address details for non UK domain
 			if(document.getElementsByName('postCode').length > 0){
-				//mimickKeyboardEnter('', 'Name', 'postCode', 0);
 				mimickKeyboardEnter('PC123', 'Name', 'postCode', 0);
-				//mimickKeyboardEnter('', 'Name', 'address', 0);
 				mimickKeyboardEnter('address', 'Name', 'address', 0);
-				//mimickKeyboardEnter('', 'Name', 'cityTown', 0);
 				mimickKeyboardEnter('cityTown', 'Name', 'cityTown', 0);
 			}
 			
 			//return flight details
 			if(document.getElementsByName('inboundFlightNumber').length > 0){
-				//mimickKeyboardEnter('', 'Name', 'inboundFlightNumber', 0);
 				mimickKeyboardEnter('ZZ987', 'Name', 'inboundFlightNumber', 0);
 			}
 			
 			//hotel details
 			if(document.getElementsByName('hotelName').length > 0){
-				//mimickKeyboardEnter('', 'Name', 'hotelName', 0);
 				mimickKeyboardEnter('Hotel Name', 'Name', 'hotelName', 0);
-				//mimickKeyboardEnter('', 'Name', 'hotelAddress', 0);
 				mimickKeyboardEnter('Hotel Address', 'Name', 'hotelAddress', 0);
 			}
 			
@@ -554,24 +560,38 @@ function bookingFormInject(userEmailId){
 		//mimic keyboard text entry for postcode field	on UK domain
 		if(document.querySelectorAll('[ng-model="term"]').length > 0){
 			mimickKeyboardEnter('', 'querySelectorAll', '[ng-model="term"]', 0);
-       		mimickKeyboardEnter('KT2 6NH', 'querySelectorAll', '[ng-model="term"]', 0);
+       		mimickKeyboardEnter('Travel republic', 'querySelectorAll', '[ng-model="term"]', 0);
+			
+			//responsive site - Find address button
+			if(document.querySelectorAll('[ng-click="triggerClickHandler()"]').length > 0){
+				document.querySelectorAll('[ng-click="triggerClickHandler()"]')[0].click();
+			}
+			
+			//mobile site - Find address link
+			if(document.querySelectorAll('[ng-click="findAddress(term)"]').length > 0){
+				document.querySelectorAll('[ng-click="findAddress(term)"]')[0].click();
+			}
 			
 			setTimeout(function(){        
-				if(document.getElementsByClassName('cmb-text ng-binding').length > 0){
-					document.getElementsByClassName('cmb-text ng-binding')[0].click();
-					
-					setTimeout(function(){ 
-						for(var i = document.getElementsByClassName('cmb-text ng-binding').length-1; i >= 0 ; i--){
-							if(document.getElementsByClassName('cmb-text ng-binding')[i].innerHTML.indexOf("Travel Republic") > -1){
-								document.getElementsByClassName('cmb-text ng-binding')[i].click();
-								break;
-							}
-						}
-					},3000);				
+				if(document.getElementsByClassName('cmb-text').length > 0){
+					document.getElementsByClassName('cmb-text')[0].click();									
 				}
 			},3000);
        	}
        	
+       	//car hire, driver select
+       	if(document.getElementsByName('carHire').length > 0){
+       		document.getElementsByName('carHire')[0].value = "number:1";
+       		document.getElementsByName('carHire')[0].dispatchEvent(evt);
+       	}
+       	
+       	//car park section
+       	if(document.getElementsByName('carMake').length > 0){
+       		document.getElementsByName('carMake')[0].value = 'car make';
+       		document.getElementsByName('carModel')[0].value = 'car model';
+       		document.getElementsByName('carColour')[0].value = 'car color';
+       		document.getElementsByName('carRegistration')[0].value = 'car registration';
+       	}
        	
        	//payment section
        	var selections = document.getElementsByName('paymentType')[0];
@@ -581,17 +601,12 @@ function bookingFormInject(userEmailId){
 		}
 		else{
 		   	selections.value = getOptionValue(selections, "Visa");
-		}
-		//trigger change event on select option
-		var evt = document.createEvent("HTMLEvents");
-		evt.initEvent('change', true, true);
+		}		
 		selections.dispatchEvent(evt);
 			
 		//enter card details
 		if(document.getElementsByName('cardNumber').length > 0){
 			if(dnataPage){
-				//mimickKeyboardEnter('','Name', 'cardNumber', 0);
-				//mimickKeyboardEnter('','Name', 'securityCode', 0);
 			    document.getElementsByName('expiryMonth')[0].value = getOptionValue(document.getElementsByName('expiryMonth')[0], '05');
 			    document.getElementsByName('expiryMonth')[0].dispatchEvent(evt);
 			    document.getElementsByName('expiryYear')[0].value = getOptionValue(document.getElementsByName('expiryYear')[0], '2017');
@@ -600,11 +615,9 @@ function bookingFormInject(userEmailId){
 			    mimickKeyboardEnter('123','Name', 'securityCode', 0);			    					
 			}
 			else{
-				//mimickKeyboardEnter('','Name', 'cardNumber', 0);
-				//mimickKeyboardEnter('','Name', 'securityCode', 0);
-				document.getElementsByName('expiryMonth')[0].value = '1';
+				document.getElementsByName('expiryMonth')[0].value = 'number:1';
 				document.getElementsByName('expiryMonth')[0].dispatchEvent(evt);
-			    document.getElementsByName('expiryYear')[0].value = '10';
+			    document.getElementsByName('expiryYear')[0].value = 'number:2030';
 			    document.getElementsByName('expiryYear')[0].dispatchEvent(evt);
 			    mimickKeyboardEnter('4444333322221111','Name', 'cardNumber', 0);
 				mimickKeyboardEnter('111','Name', 'securityCode', 0);
@@ -613,11 +626,14 @@ function bookingFormInject(userEmailId){
 		//check agree to TR terms & conditions
 		if(document.querySelector('[model="cm.booking.UserData.Contact.AgreeToConditions"]') != null){
 			document.querySelector('[model="cm.booking.UserData.Contact.AgreeToConditions"]').click();
+		}		
+		//check customer agree to important notice
+		if(document.querySelector('[model="cm.agentImportantNoticeCheck"]') != null){
+			document.querySelector('[model="cm.agentImportantNoticeCheck"]').click();
 		}
-		
 		//check promotion mail opt out
-		if(document.querySelector('[model="booking.UserData.Contact.EmailOptOut"]') != null){
-			document.querySelector('[model="booking.UserData.Contact.EmailOptOut"]').click();
+		if(document.querySelector('[model="cm.booking.UserData.Contact.EmailSignUp"]') != null){
+			document.querySelector('[model="cm.booking.UserData.Contact.EmailSignUp"]').click();
 		}
 	}
 }
