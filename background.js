@@ -215,16 +215,24 @@ function checkForValidUrl(tab)  {
 		var environment = tab.url.split("//");
 		environment = environment[1].split(".");
 		if(tab.url.indexOf('//m') == -1){
+			//website booking
 			environment = environment[0];
 		}
 		else{
+			//mobile booking
 			environment = environment[1];
 		}
-			
+				
 		if(environment == "www" || environment =='travelrepublic'){
 			environment = "";
 		}
 		else{
+			var envTwoLetters = environment.slice(0,2);
+			//take care of non standard environments
+			var env = {"pp": "pp", "ca":"cavendish"};
+			
+			environment = env[envTwoLetters] || environment;
+			
 			environment = environment +".";
 		}
 		//console.log("environment : "+ environment);
